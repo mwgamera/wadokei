@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "不定時法ノ時計",
+  "version": "0.1",
+  "description": "A clock keeping traditional Japanese time scale used during Edo period.",
+  "icons": {
+    "128": "gfx/icon128.png",
+    "48" : "gfx/icon048.png",
+    "19" : "gfx/icon019.png"
+  },
+  "background": {
+    "scripts": ["wadokei.js"]
+  },
+  "options_page": "options.html",
+  "browser_action": {
+    "default_icon": "gfx/icon019.png",
+    "default_title": "和時計"
+  }
+}

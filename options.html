@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/ecmascript" src="options.js"></script>
+    <style type="text/css">
+      form { display: table }
+      form > div { display: table-row }
+      form > div > * { display: table-cell }
+      form > div > label { text-align: right }
+      form > div > input { border-width: 1px; margin: 0 1ex }
+      form > div > input[type=text] { min-width: 40ex }
+      form > div > div { text-align: center }
+      #lat, #lon { text-align: right }
+    </style>
+  </head>
+  <body>
+    <form>
+      <div>
+        <label for="lat">Latitude:</label>
+        <input id="lat" type="text" tabindex="1">
+        <span><input type="button" id="edolat" value="Set location to Edo (Tokyo)"></span>
+        <span id="lat-info"></span>
+      </div>
+      <div>
+        <label for="lon">Longitude:</label>
+        <input id="lon" type="text" tabindex="2">
+        <span><input type="button" id="tzlon" value="Set longitude from time zone"></span>
+        <span id="lon-info"></span>
+      </div>
+      <div>
+        <label for="url">Bell sound:</label>
+        <input id="url" type="text" tabindex="3">
+        <span>
+          <input type="button" id="belldefault" value="Use default">
+          <input type="button" id="mute" value="Mute/Unmute">
+          <input type="button" id="ring" value="Try">
+        </span>
+        <span id="url-info"></span>
+      </div>
+      <div>
+        <label for="style">Icon style:</label>
+        <select id="style" tabindex="4">
+          <option value="black">black</option>
+          <option value="white">white</option>
+        </select>
+        <span id="style-info"></span>
+      </div>
+      <div>
+        <div></div>
+        <div><input id="save" type="submit" value="Save" tabindex="5"></div>
+      </div>
+    </form>
+  </body>
+</html>
