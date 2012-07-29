@@ -88,27 +88,27 @@ var wadokei = (function() {
 
     var latRad = lat * Math.PI / 180;
 
+    // Cache last N values
+    var Cache = function(N) {
+      var data = {};
+      var last = [];
+      this.get = function(i) { return data[i]; };
+      this.set = function(i,c) {
+        data[i] = c;
+        last.push(i);
+        if (last.length > N)
+          delete data[last.shift()];
+        return c;
+      };
+      this.clear = function() {
+        data = {};
+        last = [];
+      };
+    };
+    var cache = new Cache(6);
+
     // Algorithm core
     var suntime = function() {
-
-      // Cache last N values
-      var Cache = function(N) {
-        var data = {};
-        var last = [];
-        this.get = function(i) { return data[i]; };
-        this.set = function(i,c) {
-          data[i] = c;
-          last.push(i);
-          if (last.length > N)
-            delete data[last.shift()];
-          return c;
-        };
-        this.clear = function() {
-          data = {};
-          last = [];
-        };
-      };
-      var cache = new Cache(6);
 
       var meanlong = function(t) {
         var l = 5.2918382920468073E-6;
@@ -272,6 +272,7 @@ var wadokei = (function() {
     // constructor
     var WaTime = function(date) {
       var o = scaleinfo(date = Number(date || new Date()));
+      if (!o.td) throw "No sunrise or sunset";
       this.hour = hour(o, date);
       this.hourNumber = [9,8,7,6,5,4][0|(6+(this.hour-.5)%6)%6];
       this.stem = stem(this.hour, date);
@@ -351,15 +352,23 @@ var wadokei = (function() {
       (localStorage.format = "%T\u30fb%s%b\u306e\u523b%m\u3064\u6642");
     var timer = null;
     var update = function() {
-      var wt = new WaTime();
-      var title = wt.format(format);
-      
-      chrome.browserAction.setIcon({path:'gfx/'+style+'/'+(0|wt.hour)+'.png'});
-      chrome.browserAction.setTitle({title:title});
+      try {
+        var wt = new WaTime();
+        var title = wt.format(format);
 
-      if (Math.abs(wt.hour-(0|wt.hour)-0.5) < 0.01)
-        bell.ring(wt.hourNumber);
-      timer = wt.next(update);
+        chrome.browserAction.setIcon({path:'gfx/'+style+'/'+(0|wt.hour)+'.png'});
+        chrome.browserAction.setTitle({title:title});
+
+        if (Math.abs(wt.hour-(0|wt.hour)-0.5) < 0.01)
+          bell.ring(wt.hourNumber);
+        timer = wt.next(update);
+      }
+      catch (ex) {
+        chrome.browserAction.setIcon({path:'gfx/icon019.png'});
+        chrome.browserAction.setTitle({title:String(ex)});
+        console.log(ex);
+        timer = setTimeout(update, 3600000);
+      }
     };
     var init = function() {
       clearTimeout(timer);
@@ -428,6 +437,7 @@ var wadokei = (function() {
     });
 
   return {
+    WaTime: WaTime,
     bell: bell,
     sun: sun,
     ui: ui
