@@ -1,3 +1,5 @@
+"use strict";
+
 var wadokei = (function() {
   var m = function(type,args,cont) {
     (args = args || {}).type = type;
@@ -41,6 +43,12 @@ var wadokei = (function() {
       },
       setStyle: function(style,cont) {
         m('wadokei.ui.setStyle', {style:style}, cont);
+      },
+      getFormat: function(cont) {
+        m('wadokei.ui.getFormat', {}, cont);
+      },
+      setFormat: function(format,cont) {
+        m('wadokei.ui.setFormat', {format:format}, cont);
       }
     }
   };
@@ -117,11 +125,13 @@ document.addEventListener('DOMContentLoaded', function () {
   var url = $('url');
   var style = $('style');
   var mute = $('mute');
+  var format = $('format');
 
   wadokei.sun.getLatitude(function(x) { lat.set(x.retval) });
   wadokei.sun.getLongitude(function(x) { lon.set(x.retval) });
   wadokei.bell.getAudioUrl(function(x) { url.value = x.retval });
   wadokei.ui.getStyle(function(x) { style.value = x.retval });
+  wadokei.ui.getFormat(function(x) { format.value = x.retval });
 
   $('tzlon').addEventListener('click', function() {
     lon.set(- new Date().getTimezoneOffset() / 4);
@@ -188,6 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ready++; wadokei.sun.setLatLon(lat.get(), lon.get(), check);
     ready++; wadokei.bell.setAudioUrl(url.value, check);
     ready++; wadokei.ui.setStyle(style.value, check);
+    ready++; wadokei.ui.setFormat(format.value, check);
   });
 
 });

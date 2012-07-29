@@ -13,6 +13,8 @@
       form > div > input[type=text] { min-width: 40ex }
       form > div > div { text-align: center }
       #lat, #lon { text-align: right }
+      #fmt-help dl { display: table-row }
+      #fmt-help dt, #fmt-help dd { display: table-cell; padding: 0 1em }
     </style>
   </head>
   <body>
@@ -48,9 +50,49 @@
         <span id="style-info"></span>
       </div>
       <div>
+        <label for="format">Hint format:</label>
+        <input id="format" type="text" tabindex="5">
+        <span id="format-info"></span>
+      </div>
+      <div>
         <div></div>
-        <div><input id="save" type="submit" value="Save" tabindex="5"></div>
+        <div><input id="save" type="submit" value="Save" tabindex="6"></div>
       </div>
     </form>
+    <div id="fmt-help">
+      <p>Following formatting sequences are implemented:</p>
+      <dl>
+        <dt><tt>%b</tt>
+        <dd>Hour branch name (地支)
+      </dl>
+      <dl>
+        <dt><tt>%h</tt>
+        <dd>Number of bells for hour (9〜4)
+      </dl>
+      <dl>
+        <dt><tt>%M</tt>
+        <dd>Hour fraction (1〜4)
+      </dl>
+      <dl>
+        <dt><tt>%m</tt>
+        <dd>Hour fraction (一〜四)
+      </dl>
+      <dl>
+        <dt><tt>%p</tt>
+        <dd>Day or night (夜／昼)
+      </dl>
+      <dl>
+        <dt><tt>%s</tt>
+        <dd>Hour stem name (天干)
+      </dl>
+      <dl>
+        <dt><tt>%T</tt>
+        <dd>Numeric name of the hour (明け六ツ、朝五ツ、etc)
+      </dl>
+      <dl>
+        <dt><tt>%%</tt>
+        <dd>A literal ‘%’ character
+      </dl>
+    </div>
   </body>
 </html>
