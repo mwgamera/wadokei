@@ -130,8 +130,7 @@ var wadokei = (function() {
         var o = 2.18235969669371 - 33.75704138135305 * t;
         return e0 + 4.4680428851054839E-5 * Math.cos(o);
       };
-      var eqtime = function(t, l0, m, eps)
-      {
+      var eqtime = function(t, l0, m, eps) {
         var e = 0.016708634 - t * (0.000042037 + 0.0000001267 * t);
         var y = Math.tan(eps/2); y *= y;
         var sinm   = Math.sin(m);
@@ -226,13 +225,13 @@ var wadokei = (function() {
           info.t1 = sun.curset(dx);  info.f1 = 9;
           info.t = 1;
         }
-        else { // 〜明け六ツの正刻（朝）
+        else { // 真夜九つの正刻〜明け六ツの正刻（朝）
           info.t0 = sun.prevset(dx); info.f0 = -3;
           info.t1 = sun.currise(dx); info.f1 =  3;
           info.t = 0;
         }
       }
-      else { // 〜明け六ツの正刻（朝）
+      else { // 暮れ六ツの正刻〜真夜九つの正刻（暮）
         info.t0 = sun.curset(dx);   info.f0 = 9;
         info.t1 = sun.nextrise(dx); info.f1 = 15;
         info.t = 2;
