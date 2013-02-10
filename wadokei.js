@@ -6,8 +6,8 @@ var wadokei = (function() {
 
     // Bell configuration defaults
     var default_bell = "bell.ogg";
-    localStorage['bell_play'] || (localStorage.bell_play = "true");
-    localStorage['bell_url']  || (localStorage.bell_url = default_bell);
+    localStorage["bell_play"] || (localStorage.bell_play = "true");
+    localStorage["bell_url"]  || (localStorage.bell_url = default_bell);
 
     // Stack of identical Audio elements that can be played simultaneously
     var pool = function() {
@@ -15,7 +15,7 @@ var wadokei = (function() {
       var setup = function(a) {
         queue = a;
         a.startTime = 0;
-        a.addEventListener('ended', function() { push(this) });
+        a.addEventListener("ended", function() { push(this) });
       };
       var pop = function() {
         var a = queue;
@@ -82,8 +82,8 @@ var wadokei = (function() {
   var sun = function() {
 
     // Location defaults (Edo, now: Tokyo)
-    var lat = parseFloat(localStorage['latitude']  || (localStorage.latitude = "35.689506"));
-    var lon = parseFloat(localStorage['longitude'] || // (localStorage.longitude = "139.6917"));
+    var lat = parseFloat(localStorage["latitude"]  || (localStorage.latitude = "35.689506"));
+    var lon = parseFloat(localStorage["longitude"] || // (localStorage.longitude = "139.6917"));
         (localStorage.longitude = - new Date().getTimezoneOffset() / 4));
 
     var latRad = lat * Math.PI / 180;
@@ -346,8 +346,8 @@ var wadokei = (function() {
 
   // User interface
   var ui = function() {
-    var style = localStorage['style']  || (localStorage.style = "black");
-    var format = localStorage['format']  ||
+    var style = localStorage["style"]  || (localStorage.style = "black");
+    var format = localStorage["format"]  ||
       (localStorage.format = "%T\u30fb%s%b\u306e\u523b%m\u3064\u6642");
     var timer = null;
     var update = function() {
@@ -355,7 +355,7 @@ var wadokei = (function() {
         var wt = new WaTime();
         var title = wt.format(format);
 
-        chrome.browserAction.setIcon({path:'gfx/'+style+'/'+(0|wt.hour)+'.png'});
+        chrome.browserAction.setIcon({path:"gfx/"+style+"/"+(0|wt.hour)+".png"});
         chrome.browserAction.setTitle({title:title});
 
         if (Math.abs(wt.hour-(0|wt.hour)-0.5) < 0.01)
@@ -363,7 +363,7 @@ var wadokei = (function() {
         timer = setTimeout(update, wt.next());
       }
       catch (ex) {
-        chrome.browserAction.setIcon({path:'gfx/icon019.png'});
+        chrome.browserAction.setIcon({path:"gfx/icon019.png"});
         chrome.browserAction.setTitle({title:String(ex)});
         console.log(ex);
         timer = setTimeout(update, 3600000);
@@ -398,37 +398,37 @@ var wadokei = (function() {
       try {
         switch (request.type) {
           // bell
-          case 'wadokei.bell.setAudioUrl':
+          case "wadokei.bell.setAudioUrl":
             return sendResponse({retval:bell.setAudioUrl(request.url)});
-          case 'wadokei.bell.getAudioUrl':
+          case "wadokei.bell.getAudioUrl":
             return sendResponse({retval:bell.getAudioUrl()});
-          case 'wadokei.bell.isMuted':
+          case "wadokei.bell.isMuted":
             return sendResponse({retval:bell.isMuted()});
-          case 'wadokei.bell.mute':
+          case "wadokei.bell.mute":
             return sendResponse({retval:bell.mute()});
-          case 'wadokei.bell.unmute':
+          case "wadokei.bell.unmute":
             return sendResponse({retval:bell.unmute()});
-          case 'wadokei.bell.ring':
+          case "wadokei.bell.ring":
             return sendResponse({retval:bell.ring(request.times)});
           // sun
-          case 'wadokei.sun.setLatLon':
+          case "wadokei.sun.setLatLon":
             return sendResponse({retval:sun.setLatLon(request.lat, request.lon)});
-          case 'wadokei.sun.getLatitude':
+          case "wadokei.sun.getLatitude":
             return sendResponse({retval:sun.getLatitude()});
-          case 'wadokei.sun.getLongitude':
+          case "wadokei.sun.getLongitude":
             return sendResponse({retval:sun.getLongitude()});
           // ui
-          case 'wadokei.ui.getStyle':
+          case "wadokei.ui.getStyle":
             return sendResponse({retval:ui.getStyle()});
-          case 'wadokei.ui.setStyle':
+          case "wadokei.ui.setStyle":
             return sendResponse({retval:ui.setStyle(request.style)});
-          case 'wadokei.ui.getFormat':
+          case "wadokei.ui.getFormat":
             return sendResponse({retval:ui.getFormat()});
-          case 'wadokei.ui.setFormat':
+          case "wadokei.ui.setFormat":
             return sendResponse({retval:ui.setFormat(request.format)});
           // default
           default:
-            console.log('Received message of unknown type '+request.type);
+            console.log("Received message of unknown type "+request.type);
             return sendResponse({error:"Unknown type"});
         }
       }
@@ -443,5 +443,5 @@ var wadokei = (function() {
   };
 })();
 
-document.addEventListener('DOMContentLoaded', wadokei.ui.init);
+document.addEventListener("DOMContentLoaded", wadokei.ui.init);
 
