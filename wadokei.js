@@ -275,8 +275,8 @@ var wadokei = (function() {
       this.hour = hour(o, date);
       this.hourNumber = [9,8,7,6,5,4][0|(6+(this.hour-.5)%6)%6];
       this.stem = stem(this.hour, date);
-      this.next = function(fun) {
-        return setTimeout(fun, next(o, date));
+      this.next = function() {
+        return next(o, date);
       };
     };
 
@@ -360,7 +360,7 @@ var wadokei = (function() {
 
         if (Math.abs(wt.hour-(0|wt.hour)-0.5) < 0.01)
           bell.ring(wt.hourNumber);
-        timer = wt.next(update);
+        timer = setTimeout(update, wt.next());
       }
       catch (ex) {
         chrome.browserAction.setIcon({path:'gfx/icon019.png'});
