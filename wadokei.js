@@ -249,7 +249,7 @@ var wadokei = (function() {
     var next = function(o, date) {
       var f = o.f0 + (date - o.t0) / o.r;
       var t = ((0|(f*4)+1)/4 - o.f0) * o.r + o.t0;
-      return t-date + 100;
+      return t - date;
     };
 
     var stem = function(hour, date) {
@@ -349,30 +349,30 @@ var wadokei = (function() {
     var format = localStorage["format"]  ||
       (localStorage.format = "%T\u30fb%s%b\u306e\u523b%m\u3064\u6642");
     var timer = null;
-    var update = function() {
+    var update = function(force) {
       clearTimeout(timer);
       try {
-        var wt = new WaTime();
-        var title = wt.format(format);
-
-        console.debug("update", wt);
-
-        chrome.browserAction.setIcon({path:"gfx/"+style+"/"+(0|wt.hour)+".png"});
-        chrome.browserAction.setTitle({title:title});
-
-        if (Math.abs(wt.hour-(0|wt.hour)-0.5) < 0.01)
-          bell.ring(wt.hourNumber);
-        timer = setTimeout(update, wt.next);
+        var w = new WaTime();
+        console.debug("update", force ? "forced" : "scheduled", w);
+        if (force || w.next > 1000) {
+          chrome.browserAction.setIcon({path: "gfx/"+style+"/"+(0|w.hour)+".png"});
+          chrome.browserAction.setTitle({title: w.format(format)});
+          if (!force && Math.abs(w.hour-(0|w.hour)-0.5) < 0.01)
+            bell.ring(w.hourNumber);
+        }
+        timer = setTimeout(update, w.next);
       }
       catch (ex) {
-        chrome.browserAction.setIcon({path:"gfx/icon019.png"});
-        chrome.browserAction.setTitle({title:String(ex)});
+        chrome.browserAction.setIcon({path: "gfx/icon019.png"});
+        chrome.browserAction.setTitle({title: String(ex)});
         console.error(ex);
         timer = setTimeout(update, 3600000);
       }
     };
     return {
-      update: update,
+      update   : function() {
+        return update(true);
+      },
       setStyle : function(s) {
         style = localStorage.style = s.replace(/[^a-z0-9_-]/gi,"");
       },
