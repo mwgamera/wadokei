@@ -253,7 +253,7 @@ var wadokei = (function() {
     };
 
     var stem = function(hour, date) {
-      var o = scaleinfo(date = Number(date || new Date()));
+      var o = scaleinfo(date);
       if (!o.t) {
         var f = -(o.f0+.5)*o.r+o.t0;
         f -= 1342828800000;
@@ -272,12 +272,11 @@ var wadokei = (function() {
     var WaTime = function(date) {
       var o = scaleinfo(date = Number(date || new Date()));
       if (!o.td) throw "No sunrise or sunset";
+      this.date = date;
       this.hour = hour(o, date);
       this.hourNumber = [9,8,7,6,5,4][0|(6+(this.hour-.5)%6)%6];
       this.stem = stem(this.hour, date);
-      this.next = function() {
-        return next(o, date);
-      };
+      this.next = next(o, date);
     };
 
     return WaTime;
@@ -351,40 +350,37 @@ var wadokei = (function() {
       (localStorage.format = "%T\u30fb%s%b\u306e\u523b%m\u3064\u6642");
     var timer = null;
     var update = function() {
+      clearTimeout(timer);
       try {
         var wt = new WaTime();
         var title = wt.format(format);
+
+        console.debug("update", wt);
 
         chrome.browserAction.setIcon({path:"gfx/"+style+"/"+(0|wt.hour)+".png"});
         chrome.browserAction.setTitle({title:title});
 
         if (Math.abs(wt.hour-(0|wt.hour)-0.5) < 0.01)
           bell.ring(wt.hourNumber);
-        timer = setTimeout(update, wt.next());
+        timer = setTimeout(update, wt.next);
       }
       catch (ex) {
         chrome.browserAction.setIcon({path:"gfx/icon019.png"});
         chrome.browserAction.setTitle({title:String(ex)});
-        console.log(ex);
+        console.error(ex);
         timer = setTimeout(update, 3600000);
       }
     };
-    var init = function() {
-      clearTimeout(timer);
-      update();
-    };
     return {
-      init: init,
+      update: update,
       setStyle : function(s) {
         style = localStorage.style = s.replace(/[^a-z0-9_-]/gi,"");
-        init();
       },
       getStyle : function() {
         return style;
       },
       setFormat: function(fmt) {
         format = localStorage.format = fmt;
-        init();
       },
       getFormat: function() {
         return format;
@@ -418,6 +414,8 @@ var wadokei = (function() {
           case "wadokei.sun.getLongitude":
             return sendResponse({retval:sun.getLongitude()});
           // ui
+          case "wadokei.ui.update":
+            return sendResponse({retval:ui.update()});
           case "wadokei.ui.getStyle":
             return sendResponse({retval:ui.getStyle()});
           case "wadokei.ui.setStyle":
@@ -428,7 +426,7 @@ var wadokei = (function() {
             return sendResponse({retval:ui.setFormat(request.format)});
           // default
           default:
-            console.log("Received message of unknown type "+request.type);
+            console.warn("Received message of unknown type "+request.type);
             return sendResponse({error:"Unknown type"});
         }
       }
@@ -443,5 +441,4 @@ var wadokei = (function() {
   };
 })();
 
-document.addEventListener("DOMContentLoaded", wadokei.ui.init);
-
+document.addEventListener("DOMContentLoaded", wadokei.ui.update);

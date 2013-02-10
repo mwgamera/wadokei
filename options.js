@@ -3,7 +3,7 @@
 var wadokei = (function() {
   var m = function(type,args,cont) {
     (args = args || {}).type = type;
-    chrome.extension.sendMessage(args, cont);
+    chrome.extension.sendMessage(args, cont || function(){});
   };
   return {
     bell : {
@@ -38,6 +38,9 @@ var wadokei = (function() {
       }
     },
     ui : {
+      update: function(cont) {
+        m("wadokei.ui.update", {}, cont);
+      },
       getStyle: function(cont) {
         m("wadokei.ui.getStyle", {}, cont);
       },
@@ -92,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
         value = parse(field.value);
       }
       catch (ex) {
-        console.log(ex);
+        console.error(ex);
       }
       switch (dir) {
         case "SN":
@@ -168,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
       var p = function() {
         wadokei.bell.ring(1, function(r) {
           if (r.error) {
-            console.log(r);
+            console.error(r);
             alert("Error: "+r.error.code);
           }
         });
@@ -189,6 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var check = function() {
       if (!--ready) {
         button.value = "Saved";
+        wadokei.ui.update();
         setTimeout(function() {
           button.value = orgval;
           button.disabled = false;
