@@ -389,7 +389,7 @@ var wadokei = (function() {
   } ();
 
   // Expose configuration through RPC-like interface
-  chrome.extension.onMessage.addListener(
+  chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
       try {
         switch (request.type) {

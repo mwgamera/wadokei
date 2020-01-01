@@ -11,6 +11,10 @@
   "background": {
     "scripts": ["wadokei.js"]
   },
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  },
   "options_page": "options.html",
   "browser_action": {
     "default_icon": "gfx/icon019.png",

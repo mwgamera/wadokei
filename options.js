@@ -3,7 +3,7 @@
 var wadokei = (function() {
   var m = function(type,args,cont) {
     (args = args || {}).type = type;
-    chrome.extension.sendMessage(args, cont || function(){});
+    chrome.runtime.sendMessage(args, cont || function(){});
   };
   return {
     bell : {
@@ -133,8 +133,14 @@ document.addEventListener("DOMContentLoaded", function () {
   wadokei.sun.getLatitude(function(x) { lat.set(x.retval) });
   wadokei.sun.getLongitude(function(x) { lon.set(x.retval) });
   wadokei.bell.getAudioUrl(function(x) { url.value = x.retval });
-  wadokei.ui.getStyle(function(x) { style.value = x.retval });
   wadokei.ui.getFormat(function(x) { format.value = x.retval });
+  wadokei.ui.getStyle(function(x) {
+    style.value = x.retval;
+    if (style.value != x.retval) {
+      style.insertBefore(document.createElement("option"), style.firstChild).innerText = x.retval;
+      style.value = x.retval;
+    }
+  });
 
   $("tzlon").addEventListener("click", function() {
     lon.set(- new Date().getTimezoneOffset() / 4);
