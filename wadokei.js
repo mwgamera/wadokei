@@ -142,7 +142,7 @@ var wadokei = (function() {
         return eq * 720 / Math.PI;
       };
       var sunriseHA = function(lat, t, o, m, e) {
-        var cosz = -0.014543897651583; // 90°50′
+        var cosz = -0.128122480916667 // cos(90° + 7°21′40″)
         var x = 2.4434609527920616E-7;
         x *= t; x -= 8.4072510068566855E-5;
         x *= t; x += 0.033416108765268;
