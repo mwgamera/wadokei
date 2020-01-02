@@ -145,9 +145,9 @@ document.addEventListener("DOMContentLoaded", function () {
   $("tzlon").addEventListener("click", function() {
     lon.set(- new Date().getTimezoneOffset() / 4);
   });
-  $("edolat").addEventListener("click", function() {
-    lat.set(35.689506);
-    lon.set(139.6917);
+  $("kyouto").addEventListener("click", function() {
+    lat.set(35.01);
+    lon.set(135.7375);
   });
   $("belldefault").addEventListener("click", function() {
     url.value = ""

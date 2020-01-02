@@ -82,8 +82,8 @@ var wadokei = (function() {
   var sun = function() {
 
     // Location defaults (Edo, now: Tokyo)
-    var lat = parseFloat(localStorage["latitude"]  || (localStorage.latitude = "35.689506"));
-    var lon = parseFloat(localStorage["longitude"] || // (localStorage.longitude = "139.6917"));
+    var lat = parseFloat(localStorage["latitude"]  || (localStorage.latitude = "35.01"));
+    var lon = parseFloat(localStorage["longitude"] ||
         (localStorage.longitude = - new Date().getTimezoneOffset() / 4));
 
     var latRad = lat * Math.PI / 180;
@@ -288,18 +288,18 @@ var wadokei = (function() {
       if (x>0.5 && x<0.75) return "\u6b63\u5b50"; // 正子
       if (x>6.5 && x<6.75) return "\u6b63\u5348"; // 正午
       return [
-        "\u771f\u591c\u4e5d\u30c4", // 真夜九ツ
-        "\u591c\u516b\u30c4",       // 夜八ツ
-        "\u6681\u4e03\u30c4",       // 暁七ツ
-        "\u660e\u3051\u516d\u30c4", // 明け六ツ
-        "\u671d\u4e94\u30c4",       // 朝五ツ
-        "\u663c\u56db\u30c4",       // 昼四ツ
-        "\u771f\u663c\u4e5d\u30c4", // 真昼九ツ
-        "\u663c\u516b\u30c4",       // 昼八ツ
-        "\u5915\u4e03\u30c4",       // 夕七ツ
-        "\u66ae\u308c\u516d\u30c4", // 暮れ六ツ
-        "\u5bb5\u4e94\u30c4",       // 宵五ツ
-        "\u591c\u56db\u30c4"        // 夜四ツ
+        "\u591c\u4e5d\u30c4", // 夜九ツ
+        "\u591c\u516b\u30c4", // 夜八ツ
+        "\u6681\u4e03\u30c4", // 暁七ツ
+        "\u660e\u516d\u30c4", // 明六ツ
+        "\u671d\u4e94\u30c4", // 朝五ツ
+        "\u663c\u56db\u30c4", // 昼四ツ
+        "\u663c\u4e5d\u30c4", // 昼九ツ
+        "\u663c\u516b\u30c4", // 昼八ツ
+        "\u5915\u4e03\u30c4", // 夕七ツ
+        "\u66ae\u516d\u30c4", // 暮六ツ
+        "\u5bb5\u4e94\u30c4", // 宵五ツ
+        "\u591c\u56db\u30c4"  // 夜四ツ
       ][0|(12+(x-.5)%12)%12] +
       (x%1<.5?"\u534a":""); // 半
     };
@@ -312,18 +312,23 @@ var wadokei = (function() {
     var ampm = function(x) { // 夜昼
       return "\u591c\u663c".charAt(Number((8.5+x)%12 < 6));
     };
-    var frac = function(x) { // 一二三四
+    var frac4 = function(x) { // 一二三四
       return "\u4e00\u4e8c\u4e09\u56db".charAt(0|(4*x)%4);
+    };
+    var frac3 = function(x) { // 上中下
+      return "\u4e0a\u4e2d\u4e0b".charAt(0|(3*x)%3);
     };
     var esc = function(t,x) {
       if (!x.length) return x;
       switch(x) {
-        case "H": return 0|t.hour;
-        case "M": return 1+(0|(4*t.hour)%4);
+        case "H": return 0|t.hour; // deprecated
+        case "M": return 1+(0|(4*t.hour)%4); // deprecated
         case "T": return numspell(t.hour);
         case "b": return branch(t.hour);
         case "h": return t.hourNumber;
-        case "m": return frac(t.hour);
+        case "l": return frac3(t.hour);
+        case "m": return frac4(t.hour); // deprecated
+        case "n": return "\n";
         case "p": return ampm(t.hour);
         case "s": return stem(t.stem);
         default: return "%"+x;
@@ -347,7 +352,7 @@ var wadokei = (function() {
   var ui = function() {
     var style = localStorage["style"]  || (localStorage.style = "black");
     var format = localStorage["format"]  ||
-      (localStorage.format = "%T\u30fb%s%b\u306e\u523b%m\u3064\u6642");
+      (localStorage.format = "%T%n%b\u30ce%l\u523b");
     var timer = null;
     var update = function(force) {
       clearTimeout(timer);

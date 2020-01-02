@@ -22,7 +22,7 @@
       <div>
         <label for="lat">Latitude:</label>
         <input id="lat" type="text" tabindex="1">
-        <span><input type="button" id="edolat" value="Set location to Edo (Tokyo)"></span>
+        <span><input type="button" id="kyouto" value="Set location to Kyoto"></span>
         <span id="lat-info"></span>
       </div>
       <div>
@@ -72,12 +72,8 @@
         <dd>Number of bells for hour (9〜4)
       </dl>
       <dl>
-        <dt><tt>%M</tt>
-        <dd>Hour fraction (1〜4)
-      </dl>
-      <dl>
-        <dt><tt>%m</tt>
-        <dd>Hour fraction (一〜四)
+        <dt><tt>%l</tt>
+        <dd>Hour fraction (上中下)
       </dl>
       <dl>
         <dt><tt>%p</tt>
@@ -89,7 +85,11 @@
       </dl>
       <dl>
         <dt><tt>%T</tt>
-        <dd>Numeric name of the hour (明け六ツ、朝五ツ、etc)
+        <dd>Numeric name of the hour (明六ツ、朝五ツ、etc)
+      </dl>
+      <dl>
+        <dt><tt>%n</tt>
+        <dd>Line break
       </dl>
       <dl>
         <dt><tt>%%</tt>
