@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "name": "不定時法ノ時計",
-  "version": "0.3",
-  "description": "A clock keeping traditional Japanese time scale used during Edo period.",
+  "version": "0.4",
+  "description": "A clock keeping traditional Japanese time scale used at the end of Edo period.",
   "icons": {
     "128": "gfx/icon128.png",
     "48" : "gfx/icon048.png",
